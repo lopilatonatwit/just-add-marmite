@@ -1,6 +1,7 @@
 import { createClient } from 'contentful'
 import Image from 'next/image'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import Skeleton from '../../components/Skeleton'
 
 //create a client using the contentful environment variables
 const client = createClient({
@@ -22,7 +23,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false
+    fallback: true //if the page is not found, fallback to the index page, if set false it will throw a 404 error
   }
 }
 
@@ -42,13 +43,15 @@ export const getStaticProps = async ({ params }) => {
 }
 
 export default function RecipeDetails({ recipe }) {
-const { featuredImage, title, cookingTime, ingredients, method } = recipe.fields
+  if (!recipe) return <Skeleton />
+
+  const { featuredImage, title, cookingTime, ingredients, method } = recipe.fields
 
   return (
     <div>
       <div className="banner">
         <Image 
-          src={'https:' +featuredImage.fields.file.url}
+          src={'https:' + featuredImage.fields.file.url}
           alt={featuredImage.fields.title}
           width={1200}
           height={400}
