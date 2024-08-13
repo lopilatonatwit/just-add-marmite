@@ -18,7 +18,8 @@ export async function getStaticProps() {
   //return the responese as props.recipes to the Recipes component
   return {
     props: {
-      recipes: response.items
+      recipes: response.items,
+      revalidate: 1
     }
   }
 }
